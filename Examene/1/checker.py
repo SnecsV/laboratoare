@@ -72,28 +72,26 @@ def check_site(url):
 def scan_sites():
     """Verifică toate site-urile din SITES, afișează-le pe cele care merg și un rezumat."""
     lista_siteuri = []
-    succes=0
-    esuate=0
+    succes = 0
+    esuate = 0
     for site in SITES:
         result = check_site(site)
-        if result["status"] == 200:
-            succes+=1
+        status = result.get("status")
+        content_type = result.get("content_type") or ""
+        if status == 200:
+            succes += 1
         else:
-            esuate+=1
-        lista_siteuri.append((site,result["status"],len(result["content_type"])))
-    lista_siteuri.sort(key=len, reverse=True)
+            esuate += 1
+        lista_siteuri.append((site, status, len(content_type)))
+    lista_siteuri.sort(key=lambda item: item[2], reverse=True)
     print("Lista site-urilor sortate după lungimea Content-Type:")
-    for site in lista_siteuri:
-        print(site, len(site))
+    for site_info in lista_siteuri:
+        print(site_info)
     print("\nRezumat:")
-    for status in lista_siteuri:
-        if status[1] == 200:
-            site = status[0]
+    for site, status, _ in lista_siteuri:
+        if status == 200:
             print(site)
-            succes+=1
-        else:
-            esuate+=1
-    print("Merg:",succes,"| Nu merg:",esuate)
+    print("Merg:", succes, "| Nu merg:", esuate)
 
 def check_headers(url):
     """Returnează un dicționar cu: present, missing, score."""
