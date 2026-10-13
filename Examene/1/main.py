@@ -18,4 +18,4 @@ scan_sites()
 check_headers("https://httpbin.org/response-headers?X-Frame-Options=DENY&X-Content-Type-Options=nosniff")
 check_headers("https://httpbin.org/response-headers?x-frame-options=DENY")
 # Partea 6: apeluri pentru retry_check
-retry_check("https://httpbin.org/status/200,500", retries=5)
+retry_check("https://httpbin.org/status/200,500")
