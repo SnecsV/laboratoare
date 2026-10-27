@@ -73,21 +73,21 @@ def main():
     # A4
 
     # Un rezultat poate fi tot o codare. Decodează în buclă până iese text citibil (sau te oprești după câteva încercări, ca să nu intri în buclă infinită).
-    val = "NTM1OTU3NTk="
+    val = (root / "probe" / "mesaj.txt").read_text(
+        encoding="ascii"
+    ).strip()
     for _ in range(8):
         strat, b = desfa(val)
-        if citibil(b):
-            if strat == "hex":
-                print("hex:", b.hex())
-            elif strat == "base64":
-                print("base64:", b.decode())
-            else:
-                print("alt:", b.decode())
+        if not citibil(b):
+            raise ValueError("mesajul nu mai este text citibil")
+
+        text = b.decode("ascii")
+        urmatorul_strat = ghici_strat(text)
+        if urmatorul_strat == "necunoscut":
+            print("mesaj ascuns:", text)
             break
-        else:
-            val = b.decode()
-            continue
-        
+        val = text
+    print("\n")
         
     # A5
 
@@ -95,7 +95,7 @@ def main():
     for k in range(256):
         clar = bytes(b ^ k for b in date)
         if citibil(clar):
-            print("cheie:", k, clar.decode("ascii", errors="replace"))
+            print("cheie:", k, "\n", clar.decode("ascii", errors="replace"))
             break
     print("\n")
 
