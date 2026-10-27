@@ -51,92 +51,100 @@ def citibil(b):
     # TODO: True daca toti octetii sunt 32..126
     return all(32 <= c < 127 for c in b)
 
+def main():
+    print("\n")
+    root = Path(__file__).resolve().parents[2]
 
+    # A1
 
-print("\n")
-root = Path(__file__).resolve().parents[2]
+    s = "Salut"
+    b = s.encode()          # bytes
+    print(b, b[0])          # b"Salut" 83
+    print(b.hex())          # 53616c7574
+    print(bytes.fromhex(b.hex()))  # b"Salut"
+    print("\n")
+    # TODO: tipareste b.hex() si refa bytes din hex
+    #       cu bytes.fromhex(...)
 
-# A1
+    # A2
 
-s = "Salut"
-b = s.encode()          # bytes
-print(b, b[0])          # b"Salut" 83
-print(b.hex())          # 53616c7574
-print(bytes.fromhex(b.hex()))  # b"Salut"
-print("\n")
-# TODO: tipareste b.hex() si refa bytes din hex
-#       cu bytes.fromhex(...)
+    print(ghici_strat("%2Fetc"))   # url
+    print(ghici_strat("48656c6c6f"))  # hex
+    print(ghici_strat("U2FsdXQ="))  # base64
+    print(ghici_strat("Salut"))     # necunoscut
+    print("\n")
 
-# A2
+    # A4
 
-print(ghici_strat("%2Fetc"))   # url
-print(ghici_strat("48656c6c6f"))  # hex
-print(ghici_strat("U2FsdXQ="))  # base64
-print(ghici_strat("Salut"))     # necunoscut
-print("\n")
+    # Un rezultat poate fi tot o codare. Decodează în buclă până iese text citibil (sau te oprești după câteva încercări, ca să nu intri în buclă infinită).
+    val = "NTM1OTU3NTk="
+    for _ in range(8):
+        strat, b = desfa(val)
+        # TODO: daca citibil(b): opreste si tipareste
+        if citibil(b):
+            print(f"Text citibil: {ghici_strat(b.decode())}\n")
+            break
+        #       altfel val = b.decode(); continua
+        else:
+            val = b.decode()
+            continue
+    text = b.fromhex(val)
+    print(f"Text citibil: {ghici_strat(text.decode())}\n")
 
-# A4
+    # A5
 
-# Un rezultat poate fi tot o codare. Decodează în buclă până iese text citibil (sau te oprești după câteva încercări, ca să nu intri în buclă infinită).
-val = "NTM1OTU3NTk="
-for _ in range(8):
-    strat, b = desfa(val)
-    # TODO: daca citibil(b): opreste si tipareste
-    if citibil(b):
-        print(f"Text citibil: {ghici_strat(b.decode())}\n")
-        break
-#       altfel val = b.decode(); continua
-    else:
-        val = b.decode()
-        continue
-# A5
-
-date = (root / "probe" / "xor.bin").read_bytes()
-for k in range(256):
-    clar = bytes(b ^ k for b in date)
-    # TODO: daca citibil(clar):
-    #       print("cheie:", k, clar.decode())
-    if citibil(clar):
+    date = (root / "probe" / "xor.bin").read_bytes()
+    for k in range(256):
+        clar = bytes(b ^ k for b in date)
+        # TODO: daca citibil(clar):
+        #       print("cheie:", k, clar.decode())
+        if citibil(clar):
             print("cheie:", k, clar.decode())
-print("\n")
+    print("\n")
 
-# A6
+    # A6
 
-import hashlib
-tinta = (root / "probe" / "hashuri.txt").read_text().splitlines()[0]
-print(len(tinta))   # 32 md5 / 40 sha1 / 64 sha256
-for cuv in (root / "probe" / "wordlist.txt").read_text(encoding="latin1").splitlines():
-    cuv = cuv.strip()
-    # TODO: daca hashlib.md5(cuv.encode()).hexdigest()
-    #       == tinta: print("gasit:", cuv); break
-    if hashlib.md5(cuv.encode()).hexdigest() == tinta:
-        print("gasit:", cuv)
-        print("\n")
-    break
+    import hashlib
 
-# A7
+    tinta = (root / "probe" / "hashuri.txt").read_text().splitlines()[0]
+    print(len(tinta))   # 32 md5 / 40 sha1 / 64 sha256
+    for cuv in (root / "probe" / "wordlist.txt").read_text(
+        encoding="latin1"
+    ).splitlines():
+        cuv = cuv.strip()
+        # TODO: daca hashlib.md5(cuv.encode()).hexdigest()
+        #       == tinta: print("gasit:", cuv); break
+        if hashlib.md5(cuv.encode()).hexdigest() == tinta:
+            print("gasit:", cuv)
+            print("\n")
+        break
 
-import argparse
-import json
+    # A7
 
-parser = argparse.ArgumentParser()
-parser.add_argument("intrare")          # sir sau cale
-parser.add_argument("--fisier", action="store_true")
-args = parser.parse_args()
-# TODO: daca a.fisier, citeste octetii din cale;
-if args.fisier:
-    with open(args.intrare, "rb") as f:
-        data = f.read()
-else:
-    data = args.intrare.encode()
-# TODO: salveaza {strat, rezultat} in
-#       arsenal/forensics/fisa.json
-output = Path(__file__).with_name("fisa.json")
-output.write_text(
-    json.dumps(
-        {"strat": ghici_strat(data.decode()), "rezultat": data.hex()},
-        indent=2,
+    import argparse
+    import json
+
+    parser = argparse.ArgumentParser()
+    parser.add_argument("intrare")          # sir sau cale
+    parser.add_argument("--fisier", action="store_true")
+    args = parser.parse_args()
+    # TODO: daca a.fisier, citeste octetii din cale;
+    if args.fisier:
+        with open(args.intrare, "rb") as f:
+            data = f.read()
+    else:
+        data = args.intrare.encode()
+    # TODO: salveaza {strat, rezultat} in
+    #       arsenal/forensics/fisa.json
+    output = Path(__file__).with_name("fisa.json")
+    output.write_text(
+        json.dumps(
+            {"strat": ghici_strat(data.decode()), "rezultat": data.hex()},
+            indent=2,
         )
     )
 
+
+if __name__ == "__main__":
+    main()
 
