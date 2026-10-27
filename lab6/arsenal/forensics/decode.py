@@ -1,5 +1,7 @@
 import re
 import binascii
+import argparse
+import json
 from pathlib import Path
 
 
@@ -120,9 +122,7 @@ def main():
 
     # A7
     
-    import argparse
-    import json
-    from pathlib import Path
+    
 
     parser = argparse.ArgumentParser()
     parser.add_argument("intrare")       # șir sau cale
