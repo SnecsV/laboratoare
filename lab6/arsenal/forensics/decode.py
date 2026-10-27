@@ -6,13 +6,10 @@ from pathlib import Path
 
 
 def ghici_strat(s):
-    # TODO: daca are %xx -> "url"
     if re.search(r"%[0-9a-fA-F]{2}", s):
         return "url"
-    # TODO: daca doar 0-9 a-f si lungime para -> "hex"
     if re.fullmatch(r"[0-9a-fA-F]+", s) and len(s) % 2 == 0:
         return "hex"
-    # TODO: daca doar A-Za-z0-9+/= -> "base64"
     if re.fullmatch(r"[A-Za-z0-9+/=]+", s):
         return "base64"
     return "necunoscut"
@@ -50,7 +47,6 @@ def desfa(s):
 
 # Un rezultat poate fi tot o codare. Decodează în buclă până iese text citibil (sau te oprești după câteva încercări, ca să nu intri în buclă infinită).
 def citibil(b):
-    # TODO: True daca toti octetii sunt 32..126
     return all(32 <= c < 127 for c in b)
 
 def main():
@@ -65,8 +61,6 @@ def main():
     print(b.hex())          # 53616c7574
     print(bytes.fromhex(b.hex()))  # b"Salut"
     print("\n")
-    # TODO: tipareste b.hex() si refa bytes din hex
-    #       cu bytes.fromhex(...)
 
     # A2
 
@@ -82,7 +76,6 @@ def main():
     val = "NTM1OTU3NTk="
     for _ in range(8):
         strat, b = desfa(val)
-        # TODO: daca citibil(b): opreste si tipareste
         if citibil(b):
             if strat == "hex":
                 print("hex:", b.hex())
@@ -91,7 +84,6 @@ def main():
             else:
                 print("alt:", b.decode())
             break
-        #       altfel val = b.decode(); continua
         else:
             val = b.decode()
             continue
@@ -102,8 +94,6 @@ def main():
     date = (root / "probe" / "xor.bin").read_bytes()
     for k in range(256):
         clar = bytes(b ^ k for b in date)
-        # TODO: daca citibil(clar):
-        #       print("cheie:", k, clar.decode())
         if citibil(clar):
             print("cheie:", k, clar.decode("ascii", errors="replace"))
             break
