@@ -118,30 +118,40 @@ def main():
             break
 
     # A7
-
+    
     import argparse
     import json
+    from pathlib import Path
 
     parser = argparse.ArgumentParser()
-    parser.add_argument("intrare")          # sir sau cale
+    parser.add_argument("intrare")       # șir sau cale
     parser.add_argument("--fisier", action="store_true")
-    args = parser.parse_args()
-    # TODO: daca a.fisier, citeste octetii din cale;
-    if args.fisier:
-        with open(args.intrare, "rb") as f:
-            data = f.read()
-    else:
-        data = args.intrare.encode()
-    # TODO: salveaza {strat, rezultat} in
-    #       arsenal/forensics/fisa.json
-    output = Path(__file__).with_name("fisa.json")
-    output.write_text(
-        json.dumps(
-            {"strat": ghici_strat(data.decode()), "rezultat": data.hex()},
-            indent=2,
-        )
-    )
 
+    args = parser.parse_args()
+
+    if args.fisier:
+       date = Path(args.intrare).read_bytes()
+    else:
+       date = args.intrare
+
+    strat, rezultat = desfa(date)
+
+    try:
+        rezultat_json = rezultat.decode("utf-8")
+    except UnicodeDecodeError:
+        rezultat_json = rezultat.hex()
+
+    continut = {
+        "strat": strat,
+        "rezultat": rezultat_json,
+}
+
+    Path("arsenal/forensics/fisa.json").write_text(
+    json.dumps(continut, ensure_ascii=False, indent=2),
+    encoding="utf-8",
+)
+
+    print("Fisa salvată în arsenal/forensics/fisa.json")
 
 if __name__ == "__main__":
     main()
