@@ -84,13 +84,19 @@ def main():
         strat, b = desfa(val)
         # TODO: daca citibil(b): opreste si tipareste
         if citibil(b):
-            print(f"Text citibil: {b.decode()}\n")
+            if strat == "hex":
+                print("hex:", b.hex())
+            elif strat == "base64":
+                print("base64:", b.decode())
+            else:
+                print("alt:", b.decode())
             break
         #       altfel val = b.decode(); continua
         else:
             val = b.decode()
             continue
-
+        
+        
     # A5
 
     date = (root / "probe" / "xor.bin").read_bytes()
@@ -131,7 +137,7 @@ def main():
     args = parser.parse_args()
 
     if args.fisier:
-       date = Path(args.intrare).read_bytes()
+       date = Path(args.intrare).read_text(encoding="ascii", errors="replace")
     else:
        date = args.intrare
 
