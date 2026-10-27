@@ -82,14 +82,12 @@ def main():
         strat, b = desfa(val)
         # TODO: daca citibil(b): opreste si tipareste
         if citibil(b):
-            print(f"Text citibil: {ghici_strat(b.decode())}\n")
+            print(f"Text citibil: {b.decode()}\n")
             break
         #       altfel val = b.decode(); continua
         else:
             val = b.decode()
             continue
-    text = b.fromhex(val)
-    print(f"Text citibil: {ghici_strat(text.decode())}\n")
 
     # A5
 
@@ -117,7 +115,7 @@ def main():
         if hashlib.md5(cuv.encode()).hexdigest() == tinta:
             print("gasit:", cuv)
             print("\n")
-        break
+            break
 
     # A7
 
