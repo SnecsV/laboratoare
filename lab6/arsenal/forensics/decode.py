@@ -19,28 +19,22 @@ def ghici_strat(s):
 import base64
 from urllib.parse import unquote
 
-
 def desfa(s):
     if not isinstance(s, str):
         raise TypeError("desfa asteapta un sir de caractere")
-
     strat = ghici_strat(s)
-
     if strat == "base64":
         try:
             return strat, base64.b64decode(s, validate=True)
         except (binascii.Error, ValueError) as exc:
             raise ValueError("sir Base64 invalid") from exc
-
     if strat == "hex":
         try:
             return strat, bytes.fromhex(s)
         except ValueError as exc:
             raise ValueError("sir hex invalid") from exc
-
     if strat == "url":
         return strat, unquote(s).encode()
-
     return strat, s.encode()
 
 # A4
@@ -54,7 +48,7 @@ def main():
     root = Path(__file__).resolve().parents[2]
 
     # A1
-
+    
     s = "Salut"
     b = s.encode()          # bytes
     print(b, b[0])          # b"Salut" 83
@@ -138,8 +132,6 @@ def main():
          
     # A7
     
-    
-
     parser = argparse.ArgumentParser()
     parser.add_argument("intrare")       # șir sau cale
     parser.add_argument("--fisier", action="store_true")
@@ -150,14 +142,11 @@ def main():
        date = Path(args.intrare).read_text(encoding="ascii", errors="replace")
     else:
        date = args.intrare
-
     strat, rezultat = desfa(date)
-
     try:
         rezultat_json = rezultat.decode("utf-8")
     except UnicodeDecodeError:
         rezultat_json = rezultat.hex()
-
     continut = {
         "strat": strat,
         "rezultat": rezultat_json,

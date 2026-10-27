@@ -68,7 +68,6 @@ mesaj = b"FLAG{ascuns_in_pixeli}"
 biti = "".join(f"{x:08b}" for x in mesaj) + "00000000"
 if len(biti) > len(px) * 3:
     raise ValueError("Mesajul nu incape in pixelii imaginii")
-
 px_nou = []
 pozitie_bit = 0
 for pixel in px:
@@ -78,7 +77,6 @@ for pixel in px:
             canale[index] = (canale[index] & ~1) | int(biti[pozitie_bit])
             pozitie_bit += 1
     px_nou.append(tuple(canale))
-
 img.putdata(px_nou)
 img.save(probe / "stego.png")
 
