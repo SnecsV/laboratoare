@@ -112,7 +112,6 @@ def main():
     # A6
 
     import hashlib
-
     tinta = (root / "probe" / "hashuri.txt").read_text().splitlines()[0]
     print(len(tinta))   # 32 md5 / 40 sha1 / 64 sha256
     for cuv in (root / "probe" / "wordlist.txt").read_text(
@@ -124,7 +123,7 @@ def main():
         if hashlib.md5(cuv.encode()).hexdigest() == tinta:
             print("gasit:", cuv)
             print("\n")
-            break
+    
 
     # A7
     
