@@ -97,7 +97,8 @@ def main():
         # TODO: daca citibil(clar):
         #       print("cheie:", k, clar.decode())
         if citibil(clar):
-            print("cheie:", k, clar.decode())
+            print("cheie:", k, clar.decode("ascii", errors="replace"))
+            break
     print("\n")
 
     # A6
