@@ -112,20 +112,40 @@ def main():
     # A6
 
     import hashlib
-    lista = []
-    tinta = (root / "probe" / "hashuri.txt").read_text().splitlines()[0]
-    print(len(tinta))   # 32 md5 / 40 sha1 / 64 sha256
+    tinte = [
+        tinta.strip()
+        for tinta in (root / "probe" / "hashuri.txt").read_text(
+            encoding="ascii"
+        ).splitlines()
+        if tinta.strip()
+    ]
+    gasite = [None] * len(tinte)
+    ramase = set(range(len(tinte)))
     for cuv in (root / "probe" / "wordlist.txt").read_text(
         encoding="latin1"
     ).splitlines():
         cuv = cuv.strip()
-        lista.append(cuv)
-        # TODO: daca hashlib.md5(cuv.encode()).hexdigest()
-        #       == tinta: print("gasit:", cuv); break
-        for cuv in lista:
-            if hashlib.md5(cuv.encode()).hexdigest() == tinta:
-               print("gasit:", cuv)
-               break
+        for index in tuple(ramase):
+            tinta = tinte[index]
+            if len(tinta) == 32:
+                h = hashlib.md5(cuv.encode()).hexdigest()
+            elif len(tinta) == 40:
+                h = hashlib.sha1(cuv.encode()).hexdigest()
+            elif len(tinta) == 64:
+                h = hashlib.sha256(cuv.encode()).hexdigest()
+            else:
+                raise ValueError("hash necunoscut")
+            if h == tinte[index]:
+                gasite[index] = cuv
+                ramase.remove(index)
+        if not ramase:
+            break
+
+    for tinta, cuv in zip(tinte, gasite):
+        print(len(tinta))   # 32 md5 / 40 sha1 / 64 sha256
+        if cuv is not None:
+            print("cuvantul este:", cuv)
+         
     # A7
     
     
@@ -162,4 +182,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-
