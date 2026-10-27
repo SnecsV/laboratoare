@@ -1,3 +1,9 @@
+from pathlib import Path
+
+
+root = Path(__file__).resolve().parents[2]
+probe = root / "probe"
+
 # B1
 
 def tip_real(cale):
@@ -11,22 +17,22 @@ def tip_real(cale):
     elif cap.startswith(b"PK\x03\x04"):
         return "zip/docx"
     return cap.hex()
-print(tip_real("foto.jpg"))
+print(tip_real(probe / "foto.jpg"))
 print ("\n")
 
 # B2
 
 import re
-date = open("ascuns.png", "rb").read()
+date = (probe / "ascuns.png").read_bytes()
 for m in re.findall(rb"[ -~]{4,}", date):
     print(m.decode())
     print("\n")
 
-# B3 
+# B3
 
 from PIL import Image
 from PIL.ExifTags import TAGS
-exif = Image.open("foto.jpg")._getexif() or {}
+exif = Image.open(probe / "foto.jpg")._getexif() or {}
 for id, val in exif.items():
     print(TAGS.get(id, id), "=", val)
 if 34853 in exif:
@@ -42,21 +48,21 @@ print("\n")
 # B4
 
 import zipfile
-date = open("ascuns.png", "rb").read()
+date = (probe / "ascuns.png").read_bytes()
 i = date.find(b"PK\x03\x04")
 if i != -1:
-    with open("gasit.zip", "wb") as f:
-        f.write(date[i:])
+    arhiva_gasita = probe / "gasit.zip"
+    arhiva_gasita.write_bytes(date[i:])
     print("arhiva extrasa de la octetul", i)
-    with zipfile.ZipFile("gasit.zip", "r") as arhiva:
-        arhiva.extractall("extras")
+    with zipfile.ZipFile(arhiva_gasita, "r") as arhiva:
+        arhiva.extractall(probe / "extras")
         print("fisiere extrase:", arhiva.namelist())
-print("\n") 
+print("\n")
 
 # B5
 
 from PIL import Image
-img = Image.open("foto.jpg").convert("RGB")
+img = Image.open(probe / "foto.jpg").convert("RGB")
 px = list(img.get_flattened_data())
 mesaj = b"FLAG{ascuns_in_pixeli}"
 biti = "".join(f"{x:08b}" for x in mesaj) + "00000000"
@@ -74,11 +80,11 @@ for pixel in px:
     px_nou.append(tuple(canale))
 
 img.putdata(px_nou)
-img.save("stego.png")
+img.save(probe / "stego.png")
 
 # B6
 
-px = list(Image.open("stego.png").convert("RGB").get_flattened_data())
+px = list(Image.open(probe / "stego.png").convert("RGB").get_flattened_data())
 biti = "".join(f"{r & 1}{g & 1}{b & 1}" for (r, g, b) in px)
 
 mesaj_bytes = bytearray()
