@@ -27,6 +27,7 @@ Metadate:
 
 Arhiva extrasa de la octetul 782
 fisiere extrase: ['secret.txt']
+Mesaj ascuns in secret.txt - FLAG{ascuns_prin_carving}
 
 Mesaj LSB:
 FLAG{ascuns_in_pixeli}
