@@ -46,11 +46,6 @@
       "risc": "normal"
     },
     {
-      "cale": "/usr/bin/passwd",
-      "nume": "passwd",
-      "risc": "normal"
-    },
-    {
       "cale": "/bin/su",
       "nume": "su",
       "risc": "normal"
