@@ -36,7 +36,7 @@ def pe_ip(esecuri):
  
 
 def afiseaza_rezumat(esecuri):
-    print("esecuri:", len(esecuri))
+    print("Esecuri de autentificare:", len(esecuri))
     counts = pe_ip(esecuri)
     for ip, n in counts.most_common():
         print(f"  {ip}: {n}")

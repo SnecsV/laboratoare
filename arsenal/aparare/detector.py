@@ -27,7 +27,7 @@ def main():
         }, indent=2, ensure_ascii=False))
     else:
         afiseaza_rezumat(esecuri)
-        print("suspecti:")
+        print(f"Suspecti (prag{a.prag}):")
         for ip, n in sus:
             print(f" {ip} ({n} incercari) BRUTE FORCE")
 
