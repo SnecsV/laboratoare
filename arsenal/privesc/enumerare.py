@@ -7,13 +7,13 @@ def citeste_linii(cale):
         return [line.strip() for line in f if line.strip() and not line.strip().startswith("#")]
  
 cai = citeste_linii("C:\\UTM\\arsenal\\privesc\\start\\suid.txt")
-#print("linii SUID:", len(cai))
+print("linii SUID:", len(cai))
 
 def nume(cale):
     return cale.rsplit("/", 1)[-1]
  
 nume_unice = {nume(c) for c in cai}    # set comprehension
-#print("SUID distincte:", len(nume_unice))
+print("SUID distincte:", len(nume_unice))
 
 GTFO = {"find", "vim.basic", "vim", "nmap", "cp", "bash",
         "less", "awk", "python3", "perl"}
@@ -24,8 +24,8 @@ def suid_constatari(cale):
  
 suid = suid_constatari("C:\\UTM\\arsenal\\privesc\\start\\suid.txt")
 mari = [c for c in suid if c["risc"] == "mare"]
-#print(len(suid), "SUID,", len(mari), "cu risc mare")
-#print(sorted(c["nume"] for c in mari))
+print(len(suid), "SUID,", len(mari), "cu risc mare")
+print(sorted(c["nume"] for c in mari))
 
 def sudo_constatari(cale):
     out = []
