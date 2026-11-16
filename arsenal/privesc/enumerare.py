@@ -6,7 +6,7 @@ def citeste_linii(cale):
     with open(cale, encoding="utf-8") as f:
         return [line.strip() for line in f if line.strip() and not line.strip().startswith("#")]
  
-cai = citeste_linii("C:\\UTM\\arsenal\\privesc\\start\\suid.txt")
+cai = citeste_linii("./start/suid.txt")
 print("linii SUID:", len(cai))
 
 def nume(cale):
@@ -22,7 +22,7 @@ def suid_constatari(cale):
     cai = citeste_linii(cale)
     return [{"cale": c, "nume": nume(c), "risc": "mare" if nume(c) in GTFO else "normal"} for c in sorted(cai, key=nume)]
  
-suid = suid_constatari("C:\\UTM\\arsenal\\privesc\\start\\suid.txt")
+suid = suid_constatari("./start/suid.txt")
 mari = [c for c in suid if c["risc"] == "mare"]
 print(len(suid), "SUID,", len(mari), "cu risc mare")
 print(sorted(c["nume"] for c in mari))

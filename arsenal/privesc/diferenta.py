@@ -2,8 +2,8 @@ from enumerare import citeste_linii
 def cai(fisier):
     return set(citeste_linii(fisier))
  
-baza = cai("C:\\UTM\\arsenal\\privesc\\start\\baza_suid.txt")
-acum = cai("C:\\UTM\\arsenal\\privesc\\start\\suid.txt")
+baza = cai("./start/baza_suid.txt")
+acum = cai("./start/suid.txt")
 print("baza:", len(baza), " acum:", len(acum))
 
 noi = acum - baza
