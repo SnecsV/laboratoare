@@ -12,7 +12,7 @@ print("linii SUID:", len(cai))
 def nume(cale):
     return cale.rsplit("/", 1)[-1]
  
-nume_unice = {nume(c) for c in cai}    # set comprehension
+nume_unice = {nume(c) for c in (cai)}    # set comprehension
 print("SUID distincte:", len(nume_unice))
 
 GTFO = {"find", "vim.basic", "vim", "nmap", "cp", "bash",
@@ -20,7 +20,7 @@ GTFO = {"find", "vim.basic", "vim", "nmap", "cp", "bash",
  
 def suid_constatari(cale):
     cai = citeste_linii(cale)
-    return [{"cale": c, "nume": nume(c), "risc": "mare" if nume(c) in GTFO else "normal"} for c in sorted(cai, key=nume)]
+    return [{"cale": c, "nume": nume(c), "risc": "mare" if nume(c) in GTFO else "normal"} for c in sorted(set(cai), key=nume)]
  
 suid = suid_constatari("./start/suid.txt")
 mari = [c for c in suid if c["risc"] == "mare"]
@@ -67,7 +67,6 @@ def main():
     for categorie, lista in raport.items():
         mari = [c for c in lista if c.get("risc") == "mare"]
         print(f"{categorie}: {len(lista)} gasite, {len(mari)} cu risc mare")
-    # TODO: utilizatorii implicati = multimea userilor din sudo REUNITA cu cei din cron
     utilizatori_implicati = {c["user"] for c in raport["sudo"]} | {c["user"] for c in raport["cron"]}
     print(f"Utilizatori implicati: {sorted(utilizatori_implicati)}")
     with open("enum.json", "w", encoding="utf-8") as f:
