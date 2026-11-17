@@ -82,8 +82,13 @@ def main():
     ev = evenimente_din_json(a.capturi + "/evenimente.json")
     alarma = [e for e in ev if e.e_suspect()]
     if a.json:
-        print(json.dumps([asdict(p) for p in inv.suspecte()]))
-        print(json.dumps([asdict(e) for e in alarma]))
+        raport = {
+            "procese_suspecte": [asdict(p) for p in inv.suspecte()],
+            "evenimente_suspecte": [asdict(e) for e in alarma],
+        }
+        with open(a.capturi + "/raport.json", "w", encoding="utf-8") as f:
+            json.dump(raport, f, ensure_ascii=False, indent=2)
+        print(json.dumps(raport, ensure_ascii=False, indent=2))
     else:
         print(f"procese suspecte: {len(inv.suspecte())}")
         for p in inv.suspecte():
