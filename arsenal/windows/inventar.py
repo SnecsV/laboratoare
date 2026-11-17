@@ -60,7 +60,7 @@ def evenimente_din_json(cale):
     with open(cale, encoding="utf-8") as f:
         return [Eveniment(**d) for d in json.load(f)]
 def main():
-
+    print("\n\nAfișări sarcinile A:")
     p = Proces(3120, "update.exe", "ana", r"C:\Users\ana\AppData\Local\Temp\update.exe")
     print(p.pid, p.nume)
     print(p)
@@ -73,6 +73,7 @@ def main():
     for p in inv.suspecte():
         print(f"  [{p.pid}] {p.nume}  {p.cale}")
     print(inv.pe_user())
+    print("\n\nAfișări sarcinile B:")
     p = argparse.ArgumentParser()
     p.add_argument("capturi")
     p.add_argument("--json", action="store_true")
@@ -80,8 +81,6 @@ def main():
     inv = Inventar.din_json(a.capturi + "/procese.json")
     ev = evenimente_din_json(a.capturi + "/evenimente.json")
     alarma = [e for e in ev if e.e_suspect()]
-    # TODO: cu --json, json.dumps cu asdict pe suspecte si alarma;
-    #       fara, un rezumat citibil
     if a.json:
         print(json.dumps([asdict(p) for p in inv.suspecte()]))
         print(json.dumps([asdict(e) for e in alarma]))
@@ -92,7 +91,7 @@ def main():
         print(f"evenimente suspecte: {len(alarma)}")
         for e in alarma:
             print(f"  [{e.id}] {e.nivel}  {e.sursa}  {e.cont}  {e.mesaj}")
-
+    print("\n\n")
 
 if __name__ == "__main__":
     main()
